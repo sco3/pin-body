@@ -1,11 +1,10 @@
 use async_trait::async_trait;
 use bytes::{Bytes, BytesMut};
-use log::{info, warn};
+use log::info;
 use pingora::prelude::*;
 use pingora::server::configuration::Opt;
 use pingora::server::Server;
 use pingora::upstreams::peer::HttpPeer;
-use std::mem;
 
 pub struct BodyInspector;
 
