@@ -1,0 +1,21 @@
+[package]
+name = "pin-body"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+async-trait = "0.1.89"
+bytes = "1.11.1"
+env_logger = "0.11.10"
+log = "0.4.29"
+pingora = { version = "0.8.0", features = ["pingora-proxy", "proxy"] }
+tokio = { version = "1.52.3", features = ["full"] }
+memchr = "2.8.0"
+
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
