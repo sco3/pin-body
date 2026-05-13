@@ -39,7 +39,7 @@ impl ProxyHttp for BodyInspector {
         _session: &mut Session,
         _ctx: &mut Self::CTX,
     ) -> Result<Box<HttpPeer>> {
-        let peer = Box::new(HttpPeer::new(("localhost", 8080), false, "".to_string()));
+        let peer = Box::new(HttpPeer::new(("localhost", 8080), false, String::new()));
         Ok(peer)
     }
 
