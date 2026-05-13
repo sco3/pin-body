@@ -1,67 +1,17 @@
+
 use async_trait::async_trait;
 use bytes::{Bytes, BytesMut};
 use log::info;
 use pingora::prelude::*;
-use pingora::server::Server;
 use pingora::server::configuration::Opt;
+use pingora::server::Server;
 use pingora::upstreams::peer::HttpPeer;
+use std::time::Duration;
 
-pub struct BodyInspector;
+use pin_body::inspector::BodyInspector;
 
-pub struct BodyCtx {
-    buffer: BytesMut,
-}
 
-impl BodyInspector {
-    fn check_body(body: &BytesMut) -> Result<()> {
-        if memchr::memmem::find(body, b"rogue").is_some() {
-            return Err(pingora::Error::new(ErrorType::Custom(
-                "SecurityPolicyViolation",
-            )));
-        }
 
-        Ok(())
-    }
-}
-
-#[async_trait]
-impl ProxyHttp for BodyInspector {
-    type CTX = BodyCtx;
-
-    fn new_ctx(&self) -> Self::CTX {
-        BodyCtx {
-            buffer: BytesMut::new(),
-        }
-    }
-
-    async fn upstream_peer(
-        &self,
-        _session: &mut Session,
-        _ctx: &mut Self::CTX,
-    ) -> Result<Box<HttpPeer>> {
-        let peer = Box::new(HttpPeer::new(("localhost", 8080), false, String::new()));
-        Ok(peer)
-    }
-
-    async fn request_body_filter(
-        &self,
-        _session: &mut Session,
-        body: &mut Option<Bytes>,
-        end_of_stream: bool,
-        ctx: &mut Self::CTX,
-    ) -> Result<()> {
-        if let Some(chunk) = body.take() {
-            ctx.buffer.extend_from_slice(&chunk);
-        }
-
-        if end_of_stream {
-            BodyInspector::check_body(&ctx.buffer)?;
-            *body = Some(ctx.buffer.split().freeze());
-        }
-
-        Ok(())
-    }
-}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
