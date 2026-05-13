@@ -1,12 +1,8 @@
 
-use async_trait::async_trait;
-use bytes::{Bytes, BytesMut};
 use log::info;
 use pingora::prelude::*;
 use pingora::server::configuration::Opt;
 use pingora::server::Server;
-use pingora::upstreams::peer::HttpPeer;
-use std::time::Duration;
 
 use pin_body::inspector::BodyInspector;
 

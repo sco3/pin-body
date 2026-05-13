@@ -60,11 +60,10 @@ impl ProxyHttp for BodyInspector {
         upstream_res: &mut ResponseHeader,
         ctx: &mut Self::CTX,
     ) -> Result<()> {
-        if let Some(ct) = upstream_res.headers.get("Content-Type") {
-            if ct == "text/event-stream" {
+        if let Some(ct) = upstream_res.headers.get("Content-Type")
+            && ct == "text/event-stream" {
                 ctx.is_sse = true;
             }
-        }
         Ok(())
     }
 
