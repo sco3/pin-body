@@ -34,7 +34,7 @@ func main() {
 
 		fmt.Println("Client connected to SSE")
 
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 42; i++ {
 			fmt.Fprintf(w, "data: Message %d at %s\n\n", i, time.Now().Format("15:04:05"))
 			flusher.Flush()
 			time.Sleep(2 * time.Second)
